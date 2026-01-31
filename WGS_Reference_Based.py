@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Example Usage :
-# python Genotype_By_Sequencing.py -d /path/to/workdir -org Phaseolus_vulgaris --qual 40 --min_dp 10 --f_missing 0.7 --min_af 0.1
+# python Genotype_By_Sequencing.py -d /path/to/workdir -org Phaseolus_vulgaris
 
 # Please make sure to have all the required tools installed and accessible in your PATH.
 # All the snp and indel filtration parameters are as per GATK pipeline. You can make changes if required.
