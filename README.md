@@ -61,6 +61,7 @@ Paired-end reads
 Naming format:
 
 <sample_name>_R1.fastq.gz
+
 <sample_name>_R2.fastq.gz
 
 2. Reference files
