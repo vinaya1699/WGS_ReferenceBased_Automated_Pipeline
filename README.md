@@ -152,6 +152,10 @@ snpEff database creation
 
 Annotated VCFs + HTML & CSV reports
 
+<img width="1578" height="3846" alt="Workflow" src="https://github.com/user-attachments/assets/9397d584-f44b-46f0-9342-34770b60fed3" />
+
+
+
 📊 Output Files
 
 BAM files (duplicate-marked)
