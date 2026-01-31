@@ -44,9 +44,13 @@ Working_Directory
    └── Fastqc_Output
 
 3_Alignment
+
 4_Variant_Calling
+
 5_Variant_Filtration
+
 6_Variant_Annotation
+
 logs
 
 🧬 Input Requirements
