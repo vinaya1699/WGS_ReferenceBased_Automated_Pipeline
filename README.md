@@ -106,54 +106,7 @@ Argument	Description
 
 🔬 Pipeline Workflow
 
-Raw Data QC
-
-FastQC on raw FASTQ files
-
-Read Trimming
-
-fastp (adapter trimming, quality filtering)
-
-Clean Data QC
-
-FastQC on cleaned FASTQ files
-
-Reference Indexing
-
-BWA index
-
-Samtools faidx
-
-Picard sequence dictionary
-
-Alignment
-
-BWA-MEM alignment
-
-Samtools sorting
-
-Picard MarkDuplicates
-
-Variant Calling
-
-GATK HaplotypeCaller (per sample VCF)
-
-Variant Filtration
-
-Separate SNPs and INDELs
-
-Apply GATK hard filters
-
-Retain PASS variants only
-
-Variant Annotation
-
-snpEff database creation
-
-Annotated VCFs + HTML & CSV reports
-
 <img width="1578" height="3846" alt="Workflow" src="https://github.com/user-attachments/assets/9397d584-f44b-46f0-9342-34770b60fed3" />
-
 
 
 📊 Output Files
