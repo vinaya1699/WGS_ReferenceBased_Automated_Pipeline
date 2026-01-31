@@ -30,24 +30,23 @@ Supports multiple samples in one run
 The pipeline expects and generates the following structure:
 
 Working_Directory/
-│
-├── 0_Reference_Genome/
-│   ├── organism.fasta
-│   └── organism.gtf
-│
-├── 1_RawData/
-│   ├── sample1_R1.fastq.gz
-│   ├── sample1_R2.fastq.gz
-│   └── Fastqc_Output/
-│
-├── 2_Clean_data/
-│   └── Fastqc_Output/
-│
-├── 3_Alignment/
-├── 4_Variant_Calling/
-├── 5_Variant_Filtration/
-├── 6_Variant_Annotation/
-└── logs/
+ 0_Reference_Genome/
+   ├── organism.fasta
+   └── organism.gtf
+
+1_RawData/
+   ├── sample1_R1.fastq.gz
+   ├── sample1_R2.fastq.gz
+   └── Fastqc_Output/
+
+2_Clean_data/
+   └── Fastqc_Output/
+
+3_Alignment/
+4_Variant_Calling/
+5_Variant_Filtration/
+6_Variant_Annotation/
+logs/
 
 🧬 Input Requirements
 1. Raw FASTQ files
