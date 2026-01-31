@@ -95,10 +95,8 @@ Python libraries:
 pip install pandas numpy
 
 ▶️ Usage
-python WGS_Reference_Based.py \
-  -d /path/to/Working_Directory \
-  -org organism_name \
-  -t 20
+
+python WGS_Reference_Based.py -d /path/to/Working_Directory -org organism_name -t 20
 
 Arguments
 Argument	Description
