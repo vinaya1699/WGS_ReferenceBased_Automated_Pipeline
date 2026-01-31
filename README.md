@@ -1,4 +1,4 @@
-Reference-Based Whole Genome Sequencing (WGS) Automation Pipeline
+**Reference-Based Whole Genome Sequencing (WGS) Automated Pipeline**
 
 🚀 An end-to-end reference-based Whole Genome Sequencing (WGS) analysis pipeline written in Python.
 This pipeline automates QC → trimming → alignment → variant calling → filtration → annotation using widely adopted bioinformatics tools.
