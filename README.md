@@ -5,7 +5,7 @@ This pipeline automates QC → trimming → alignment → variant calling → fi
 
 Author: Vinaya Kadam
 
-📌 Features
+**📌 Features**
 
 Raw data quality control using FastQC
 
@@ -25,11 +25,11 @@ Automatic logging for each step
 
 Supports multiple samples in one run
 
-📂 Directory Structure
+**📂 Directory Structure**
 
 The pipeline expects and generates the following structure:
 
-Working_Directory
+**Working_Directory**
 
  0_Reference_Genome
    ├── organism.fasta
@@ -53,7 +53,7 @@ Working_Directory
 
 logs
 
-🧬 Input Requirements
+**🧬 Input Requirements**
 1. Raw FASTQ files
 
 Paired-end reads
@@ -76,9 +76,9 @@ Annotation file (GTF format):
 organism.gtf
 
 
-⚠️ organism name must match the filename prefix exactly.
+**⚠️ organism name must match the filename prefix exactly.**
 
-🛠️ Software Dependencies
+**🛠️ Software Dependencies**
 
 Make sure the following tools are installed and available in your $PATH:
 
@@ -94,7 +94,7 @@ Java (≥ 8)
 Python libraries:
 pip install pandas numpy
 
-▶️ Usage
+**▶️ Usage**
 
 python WGS_Reference_Based.py -d /path/to/Working_Directory -org organism_name -t 20
 
@@ -104,12 +104,12 @@ Argument	Description
 -org / --organism	Organism name (reference FASTA prefix)
 -t / --threads	Number of threads (default: 4)
 
-🔬 Pipeline Workflow
+**🔬 Pipeline Workflow**
 
 <img width="1578" height="3846" alt="Workflow" src="https://github.com/user-attachments/assets/9397d584-f44b-46f0-9342-34770b60fed3" />
 
 
-📊 Output Files
+**📊 Output Files**
 
 BAM files (duplicate-marked)
 
@@ -121,11 +121,7 @@ snpEff HTML summary reports
 
 Detailed log files for each step
 
-📝 Logs
-
-All logs are stored in the logs/ directory, making debugging and audit trails easy.
-
-⚠️ Notes
+**⚠️ Notes**
 
 This pipeline follows GATK Best Practices for hard filtering.
 
