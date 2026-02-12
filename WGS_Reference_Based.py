@@ -35,7 +35,7 @@ print(f"Script started at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'
 # ---------------- ARGUMENTS ---------------- #
 parser = argparse.ArgumentParser(description="GBS Automation Script")
 parser.add_argument('-d', '--Working_Directory', type=str, required=True, help='Input working directory containing raw FASTQ files')
-parser.add_argument('-t', '--threads', type=int, default=4, help='Number of threads')
+parser.add_argument('-t', '--threads', type=int, default=20, help='Number of threads')
 parser.add_argument('-org', '--organism', type=str, required=True, help='Organism name (reference fasta prefix)')
 
 args = parser.parse_args()
