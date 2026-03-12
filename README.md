@@ -2,6 +2,8 @@
 
 🚀 An end-to-end reference-based Whole Genome Sequencing (WGS) analysis pipeline written in Python.
 
+This pipeline is not suitable for Human data as BQSR step is not included.
+
 Author: Vinaya Kadam
 
 **🔬 Pipeline Workflow**
