@@ -1,9 +1,12 @@
 **Reference-Based Whole Genome Sequencing (WGS) Automated Pipeline**
 
 🚀 An end-to-end reference-based Whole Genome Sequencing (WGS) analysis pipeline written in Python.
-This pipeline automates QC → trimming → alignment → variant calling → filtration → annotation using widely adopted bioinformatics tools.
 
 Author: Vinaya Kadam
+
+**🔬 Pipeline Workflow**
+
+<img width="1578" height="3846" alt="Workflow" src="https://github.com/user-attachments/assets/9397d584-f44b-46f0-9342-34770b60fed3" />
 
 **📌 Features**
 
@@ -13,7 +16,7 @@ Read trimming and filtering using fastp
 
 Alignment to reference genome using BWA-MEM
 
-BAM processing and duplicate marking using Samtools & Picard
+BAM processing and duplicate marking using Samtools & Picard ; Calculation of genome coverage
 
 Variant calling using GATK HaplotypeCaller
 
@@ -104,9 +107,7 @@ Argument	Description
 -org / --organism	Organism name (reference FASTA prefix)
 -t / --threads	Number of threads (default: 4)
 
-**🔬 Pipeline Workflow**
 
-<img width="1578" height="3846" alt="Workflow" src="https://github.com/user-attachments/assets/9397d584-f44b-46f0-9342-34770b60fed3" />
 
 
 **📊 Output Files**
