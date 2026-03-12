@@ -35,7 +35,7 @@ print(f"Script started at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'
 # ---------------- ARGUMENTS ---------------- #
 parser = argparse.ArgumentParser(description="GBS Automation Script")
 parser.add_argument('-d', '--Working_Directory', type=str, required=True, help='Input working directory containing raw FASTQ files')
-parser.add_argument('-t', '--threads', type=int, default=20, help='Number of threads')
+parser.add_argument('-t', '--threads', type=int, default=4, help='Number of threads')
 parser.add_argument('-org', '--organism', type=str, required=True, help='Organism name (reference fasta prefix)')
 
 args = parser.parse_args()
@@ -52,7 +52,9 @@ picard = "/Analysis3/Vinaya/picard.jar"
 gatk = "/apps/gatk-4.2.6.1/gatk"
 vcf_dir = "4_Variant_Calling"
 snpEff = "/apps/snpEff5.0/snpEff.jar"
-snpEff_data = "/apps/snpEff5.0/data"
+# snpEff_data = "/apps/snpEff5.0/data"
+snpEff_data = "/mnt/tnas/SnpEff5.0_Database/data"
+
 
 Input_Raw_files = glob.glob("1_RawData/*_R1.fastq.gz")
 files_series = pd.Series(Input_Raw_files)
@@ -182,6 +184,23 @@ for sample in samples:
     run_command(markdup_cmd, log_markdup)
     print(f"Final BAM with duplicates marked: {marked_bam}")
 
+    # ---------------- Mosdepth ---------------- #
+    log_mosdepth = f"{log_dir}/{sample}_mosdepth.log"
+    # mosdepth_cmd = [
+    #     "mosdepth", "-t", str(threads), "-n",
+    #     f"{alignment_dir}/{sample}_mosdepth",
+    #     marked_bam
+    # ]
+
+    mosdepth_cmd = [
+    "mosdepth", "-t", str(threads), "-n",
+    "--by", "1000",
+    "--thresholds", "1,5,10,20,30",
+    f"{alignment_dir}/{sample}_mosdepth",
+    marked_bam
+    ]
+    run_command(mosdepth_cmd, log_mosdepth)
+
 # ---------------- GATK HaplotypeCaller ---------------- #
 print("######################## GATK HaplotypeCaller : Variant Calling########################")
 os.makedirs(vcf_dir, exist_ok=True)
@@ -262,8 +281,11 @@ for sample in samples:
 
 print("############################### SNP Annotation ##################################")
 
+
+snpEff_config = "/mnt/tnas/SnpEff5.0_Database/"
+
 def ensure_snpeff_config_entry(organism, snpEff_data, snpEff_path):
-    config_path = os.path.join(os.path.dirname(snpEff_path), "snpEff.config")
+    config_path = os.path.join(os.path.dirname(snpEff_config), "snpEff.config")
     entry = f"{organism}.genome : {organism}\n"
     # Check if entry exists
     with open(config_path, "r") as f:
@@ -309,8 +331,8 @@ snpEff_db_file = os.path.join(organism_snpEff_dir, "snpEffectPredictor.bin")
 if not os.path.exists(snpEff_db_file):
     print(f"Building snpEff database for organism: {organism}")
     build_cmd = [
-        "java", "-jar", snpEff,
-        "build", "-gtf22", "-v", organism
+        "java", "-Xmx60g", "-jar", snpEff,
+        "build", "-gtf22", "-v", "-c", snpEff_config, organism
     ]
     process = subprocess.Popen(build_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in process.stdout:
@@ -331,6 +353,7 @@ for sample in samples:
     log = f"{log_dir}/{sample}_Variant_annotation.log"
     cmd = [
         "java", "-jar", snpEff,
+        "-c", snpEff_config,
         "-v", organism,
         "-noLog", "-no-downstream", "-no-upstream", "-no-utr",
         "-o", "vcf",
@@ -358,6 +381,7 @@ for sample in samples:
     log = f"{log_dir}/{sample}_snp_annotation.log"
     cmd = [
         "java", "-jar", snpEff,
+        "-c", snpEff_config,
         "-v", organism,
         "-noLog", "-no-downstream", "-no-upstream", "-no-utr",
         "-o", "vcf",
@@ -385,6 +409,7 @@ for sample in samples:
     log = f"{log_dir}/{sample}_Indels_annotation.log"
     cmd = [
         "java", "-jar", snpEff,
+        "-c", snpEff_config,
         "-v", organism,
         "-noLog", "-no-downstream", "-no-upstream", "-no-utr",
         "-o", "vcf",
@@ -403,6 +428,34 @@ for sample in samples:
     print(f"Annotated Indels for sample {sample} written to {Indels_vcf_output}")
     print(f"Indels stats: {Indels_csv_stats}, HTML summary: {Indels_html_stats}")
 
+
+# Annotate Passed Variants with stats
+for sample in samples:
+    Passed_vcf_input = f"{annotation_dir}/{sample}_Passed_Variants.vcf"
+    Passed_vcf_output = f"{annotation_dir}/{sample}_Annotated_Passed.vcf"
+    Passed_csv_stats = f"{annotation_dir}/{sample}_Passed_ann.csv.stats"
+    Passed_html_stats = f"{annotation_dir}/{sample}_Passed_summary.html"
+    log = f"{log_dir}/{sample}_Passed_annotation.log"
+    cmd = [
+        "java", "-jar", snpEff,
+        "-c", snpEff_config,
+        "-v", organism,
+        "-noLog", "-no-downstream", "-no-upstream", "-no-utr",
+        "-o", "vcf",
+        Passed_vcf_input,
+        "-csvStats", Passed_csv_stats,
+        "-htmlStats", Passed_html_stats
+    ]
+    with open(log, "w") as logfile, open(Passed_vcf_output, "w") as Passed_vcf_out:
+        process = subprocess.Popen(cmd, stdout=Passed_vcf_output, stderr=subprocess.PIPE, text=True)
+        for line in process.stderr:
+            print(line, end="")
+            logfile.write(line)
+        process.wait()
+    if process.returncode != 0:
+        raise RuntimeError(f"Passed variants annotation failed for {sample}. Check {log}")
+    print(f"Annotated Passed variants for sample {sample} written to {Passed_vcf_output}")
+    print(f"Passed variants stats: {Passed_csv_stats}, HTML summary: {Passed_html_stats}")
 
 #####################################################################################################
 print(f"Script ended at: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
