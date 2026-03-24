@@ -48,7 +48,7 @@ print(f"Changed working directory to: {args.Working_Directory}")
 
 ref_dir = "0_Reference_Genome"
 ref_fasta = f"{ref_dir}/{organism}.fasta"
-picard = "/Analysis3/Vinaya/picard.jar"
+picard = "/apps/picard/build/libs/picard.jar"
 gatk = "/apps/gatk-4.2.6.1/gatk"
 vcf_dir = "4_Variant_Calling"
 snpEff = "/apps/snpEff5.0/snpEff.jar"
@@ -179,10 +179,14 @@ for sample in samples:
     log_markdup = f"{log_dir}/{sample}_markduplicates.log"
     markdup_cmd = [
         "java", "-Xmx16g", "-jar", picard, "MarkDuplicates",
-        f"I={bam}", f"O={marked_bam}", f"M={metrics}", "QUIET=TRUE"
+        f"I={bam}", f"O={marked_bam}", f"M={metrics}", "MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=200", "QUIET=TRUE","VALIDATION_STRINGENCY=SILENT"
     ]
     run_command(markdup_cmd, log_markdup)
     print(f"Final BAM with duplicates marked: {marked_bam}")
+    
+    marked_bam = f"3_Alignment/{sample}_sorted_rdgrp_dup_marked.bam"
+    run_command(["samtools", "index", marked_bam], f"{log_dir}/{sample}_bam_index.log")
+ 
 
     # ---------------- Mosdepth ---------------- #
     log_mosdepth = f"{log_dir}/{sample}_mosdepth.log"
